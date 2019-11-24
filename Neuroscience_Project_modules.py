@@ -73,8 +73,8 @@ class Connectivity_Graph:
             -plot: (DEFAULT: FALSE) if TRUE, plotting of the model order respect to minimization of BIC critirion
             -resolution: frequency resolution
             -threshold: (float between 0,1) percentage of density threshold
-            -mode: (default: 0 for Directed graph)
-            -significance: list with the nodes we want to exclude from our analysis regarding their significance
+            -mode: (default: 0 for Directed graph, else 1 for Undirected graph)
+            -significance: list with the nodes we want to exclude - filter out from our analysis regarding their significance value
             
         """
         self.conn_algorithm = algorithm
@@ -109,7 +109,7 @@ class Connectivity_Graph:
             for a,b in significance:
                 Adj[a,b] = 0
         ################################################################################
-        self.G = Graph.Weighted_Adjacency(Adj.tolist(), mode = mode) # mode=0 is for directed / mode=1 is for indirected graph
+        self.G = Graph.Weighted_Adjacency(Adj.tolist(), mode = mode) 
     
     
         self.G.vs["label"] = list(map(lambda x: re.sub('\.', '', x), self.channels))
@@ -161,18 +161,18 @@ class Connectivity_Graph:
     
     
     def significance(self,signf_threshold=None,channels=[],order=None,Nrep=200,alpha=0.05,visual=False,path=None,freq=10,name='significance'):
-        """Computes the significance of the nodes using resampling method for the graph created
+        """Computes the significance (p-value) of the assoiated nodes connections using resampling method for the graph created
            Inputs:
                - signf_threshold: limits of significance under which we want to exclude specific nodes
                - channels: list of the channels we want to extract for the rest of the procedure, if empty we use them all.
                - order: order of the MVAR model
                - Nrep: number od resamples - number of repetitions for the resampling algorithm
-               - alpha: (default 0.05) p-value - type I error rate (significance level)
+               - alpha: (default 0.05) - type I error rate (significance level)
                - visual: if TRUE plots the new network
                - path: path of .edf file we want to import the data if visual TRUE
                - freq: sample frequency if visual TRUE
                - name: name of the output plot of the network if visual TRUE
-               """
+        """
         df = self.df
         if channels:
             df = df[channels]
@@ -734,7 +734,6 @@ class Graph_for_motifs(Connectivity_Graph):
         res.sort_values("occurrencies", ascending = False, inplace = True)
         
         return res
-
 
 
 
