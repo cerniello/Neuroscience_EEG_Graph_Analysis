@@ -1,6 +1,6 @@
 # Brain network study during resting states
 
-## Bioinformatic project @Sapienza Univeristy of Rome, academic year: 2019/2020
+## Bioinformatics project @Sapienza Univeristy of Rome, academic year: 2019/2020
 
 ### Authors: Francesco Russo, Iason Tsardanidis, Michele Cernigliaro
 
@@ -15,4 +15,6 @@ This study takes its foundations in the field of network neuroscience. More spec
   * EEG signal during resting states of patient nr. 4 in .edf format ('S004R01.edf', 'S004R02.edf')
   * channel_locations.txt: channels mapping
   * Other .txt files: files related to motifs analysis (mfinder format)
-* BioInformatics - Project_1 - Neuroscience.html : Final file 
+* BioInformatics - Project_1 - Neuroscience.ipynb: jupyter notebook with all the runs for this project
+* Neuroscience_Project_modules.py: Python file containing the class and the functions implemented for this project
+* BioInformatics - Project_1 - Neuroscience.html : html file of the jupyter notebook runned and executed 
