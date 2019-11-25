@@ -736,7 +736,9 @@ class Graph_for_motifs(Connectivity_Graph):
         return res
 
 
-
+# This APL function is an exact replica of the one in the Graph_Theory_Indices class
+# but it's meant to work on external graphs (i.e. random or lattice graphs)
+# which are not defined inside the class
 def average_path_length(G, weights = False):
 
     APL = 0
@@ -821,11 +823,21 @@ def global_clustering_coefficient(G, weights = False):
         return GCC
 
 def top10(local_degree_dict):
-
+    """
+        This function computes the top 10 nodes, sorted according to their
+        indegree, outdegree and total degree
+        input:
+        - local_degree_dict: dictionary containing the nodes (as keys)
+                             and the associated degree (as values)
+        """
+    
+    # define top 10 nodes dictionary
     top_dict = {}
     
+    # sort degrees of nodes
     local_degree_list = sorted(local_degree_dict.values())[::-1]
-
+    
+    # sort nodes according to degree
     for i in range(len(local_degree_list)):
 
         for v in local_degree_dict:
