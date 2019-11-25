@@ -19,4 +19,4 @@ This study takes its foundations in the field of network neuroscience. More spec
   * Other .txt files: files related to motifs analysis (mfinder format)
 * BioInformatics - Project_1 - Neuroscience.ipynb: jupyter notebook with all the runs for this project
 * Neuroscience_Project_modules.py: Python file containing the class and the functions implemented for this project
-* BioInformatics - Project_1 - Neuroscience.html : html file of the jupyter notebook runned and executed 
+* BioInformatics - Project_1 - Neuroscience.html: html file of the jupyter notebook runned and executed 
