@@ -734,6 +734,72 @@ class Graph_for_motifs(Connectivity_Graph):
         res.sort_values("occurrencies", ascending = False, inplace = True)
         
         return res
+    
+    
+def detect_4motifs(resting_state = 'EC'):
+    """
+    Function which gets from files of mfinder the list of all patterns
+    and returns motifs and antimotifs according to the rule:
+    Motifs: Z > 3, pvalue < 0.05
+    Antimotifs: Z < -3, pvalue > 0.95
+    
+    Be aware to change the mfinder output file format and 
+    DELETE ALL the rows before the list of motifs except for these two:
+    
+    MOTIF   NREAL       NRAND     NREAL      NREAL   CREAL   UNIQ
+     ID     STATS       ZSCORE     PVAL     [MILI]     
+     
+    input: 'EO' or 'EC'
+    output: 2 csv files 'motifs.csv' and 'antimotifs.csv' stored in 'data/'
+    """
+    
+    if resting_state == 'EO':
+        path = "data/EO_10Hz_0.05dt_4_Motifs_OUT.txt"
+    else:
+        path = "data/EC_10Hz_0.05dt_4_Motifs_OUT.txt"
+
+    # creating the list
+    lst = []
+
+    with open (path, "r") as myfile:
+        for line in myfile:
+            lst.append(line.strip()) 
+
+    # skipping the first 2 lines (mfinder output file description)
+    lst = lst[2:]
+
+    # removing the empty lines and creating list of nodes from each line
+    lst = [line.split('\t') for line in lst if len(line)!=0]
+    
+    # transform the nodes in integer for each motif in the list
+    lst = [line[0:5] for line in lst]
+        
+    df = pd.DataFrame(lst, columns=['Motif_ID', 'N_real', 'Nrand', 'Zscore', 'pvalue'])
+    df.Motif_ID = df.Motif_ID.apply(int)
+    df.N_real = df.N_real.apply(int)
+    df.Zscore = df.Zscore.apply(np.float32)
+    df.pvalue = df.pvalue.apply(np.float32)
+
+    motif = df[(df['N_real'] != 0) & (df['Zscore'] >= 3) & (df['pvalue'] < 0.05)]
+    motif = motif.sort_values(['Zscore', 'pvalue'], ascending=False)
+
+    antimotif = df[(df['N_real'] != 0) & (df['Zscore'] <= -2.5) & (df['pvalue'] > 0.95)]
+    antimotif = antimotif.sort_values(['Zscore', 'pvalue'])
+
+    motifs_filepath = 'data/' + resting_state + '_4Motif.csv'
+
+    antimotifs_filepath = 'data/' + resting_state + '_4Antimotif.csv'
+
+
+    print('Saving motifs in ', motifs_filepath, '...', end='')
+    motif.to_csv(motifs_filepath, index=False)
+    print('done')
+    
+    print('Saving antimotifs in ', antimotifs_filepath, '...', end='')
+    antimotif.to_csv(antimotifs_filepath, index=False)
+    print('done')
+    
+    return
 
 
 # This APL function is an exact replica of the one in the Graph_Theory_Indices class
